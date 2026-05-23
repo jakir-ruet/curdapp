@@ -1,5 +1,6 @@
 package com.jakirbd.curdapp.dto.request;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import jakarta.validation.constraints.DecimalMax;
@@ -21,9 +22,13 @@ public class ProductRequest {
 
 	@NotNull(message = "Price is required")
 	@Positive(message = "Price must be positive")
-	@DecimalMin(value = "0.01", message = "Price must be at least 999999.99")
+	@DecimalMin(value = "0.01", message = "Price must be at least 0.01")
 	@DecimalMax(value = "999999.99", message = "Price can't execeed 1,000.000")
+	private BigDecimal price;
+
 	private Integer stockQuantity = 0;
+
 	private Long catagoryId;
+	
 	private List<ImageRequest> images;
 }

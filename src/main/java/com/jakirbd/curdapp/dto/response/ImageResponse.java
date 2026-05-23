@@ -12,5 +12,5 @@ public class ImageResponse {
 	private String imageUrl;
 	private Boolean isPrimary;
 	private Long productId;
-	private LocalDateTime createAt;
+	private LocalDateTime createdAt;
 }
