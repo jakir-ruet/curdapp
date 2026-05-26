@@ -1,0 +1,10 @@
+{
+  "properties": [
+    {
+      "name": "app.image.upload-dir",
+      "type": "java.lang.String",
+      "description": "Directory path for storing uploaded images",
+      "defaultValue": "uploads/images/"
+    }
+  ]
+}

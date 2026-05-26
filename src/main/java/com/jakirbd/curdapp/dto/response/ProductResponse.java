@@ -9,6 +9,7 @@ import lombok.Data;
 
 @Data
 @Builder
+
 public class ProductResponse {
 	private Long id;
 	private String name;
@@ -18,6 +19,6 @@ public class ProductResponse {
 	private Long categoryId;
 	private String categoryName;
 	private List<ImageResponse> images;
-	private LocalDateTime createAt;
-	private LocalDateTime updateAt;
+	private LocalDateTime createdDate;
+	private LocalDateTime updatedDate;
 }
