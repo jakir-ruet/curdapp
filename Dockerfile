@@ -1,4 +1,4 @@
-# Dockerfile - Production Ready
+# Dockerfile - Production Ready with Docker Hub
 FROM eclipse-temurin:21-jre-alpine
 
 # Install runtime dependencies
@@ -11,11 +11,11 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 WORKDIR /app
 
-# Copy your application JAR
-COPY curdapp/target/curdapp-0.0.1-SNAPSHOT.jar app.jar
+# # Copy your application JAR
+# COPY target/curdapp-0.0.1-SNAPSHOT.jar app.jar
 
 # Copy uploads directory if exists
-RUN mkdir -p /app/uploads/images
+COPY curdapp/target/curdapp-0.0.1-SNAPSHOT.jar app.jar
 
 # Create necessary directories
 RUN mkdir -p /app/uploads/images /app/logs && \

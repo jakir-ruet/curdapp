@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: curdapp
-        image: ${DOCKER_REGISTRY}/curdapp:${IMAGE_TAG}
+        image: ${DOCKER_USERNAME}/curdapp:${IMAGE_TAG}
         imagePullPolicy: Always
         ports:
         - containerPort: 8090
@@ -42,6 +42,14 @@ spec:
         env:
         - name: SPRING_DATASOURCE_URL
           value: "jdbc:postgresql://postgres-service:5432/curdappdb"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
         resources:
           requests:
             memory: "512Mi"
@@ -85,3 +93,46 @@ spec:
       - name: logs
         emptyDir: {}
       terminationGracePeriodSeconds: 60
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - curdapp
+              topologyKey: kubernetes.io/hostname
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 50
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - postgres
+              topologyKey: kubernetes.io/hostname
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: curdapp-service
+  namespace: production
+  labels:
+    app: curdapp
+spec:
+  selector:
+    app: curdapp
+  ports:
+  - port: 80
+    targetPort: 8090
+    name: http
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
