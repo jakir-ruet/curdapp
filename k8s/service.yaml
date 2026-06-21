@@ -1,0 +1,17 @@
+# k8s/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: curdapp-service
+  namespace: production
+  labels:
+    app: curdapp
+spec:
+  selector:
+    app: curdapp
+  ports:
+  - port: 80
+    targetPort: 8090
+    name: http
+  type: ClusterIP
+  sessionAffinity: ClientIP

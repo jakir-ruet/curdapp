@@ -1,0 +1,18 @@
+# k8s/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: curdapp-config
+  namespace: production
+data:
+  SPRING_PROFILES_ACTIVE: "prod"
+  SERVER_PORT: "8090"
+  APP_IMAGE_UPLOAD_DIR: "/app/uploads/images/"
+  SPRING_JPA_SHOW_SQL: "false"
+  SPRING_JPA_HIBERNATE_DDL_AUTO: "none"
+  LOGGING_LEVEL_COM_JAKIRBD_CURDAPP: "INFO"
+  MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,metrics,prometheus"
+  MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: "always"
+  SPRING_DATASOURCE_HOST: "postgres-service"
+  SPRING_DATASOURCE_PORT: "5432"
+  SPRING_DATASOURCE_DATABASE: "curdappdb"

@@ -1,0 +1,56 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: curdapp-postgres
+    environment:
+      POSTGRES_DB: curdappdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Sql054003
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - curdapp-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d curdappdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: curdapp-application
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/curdappdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Sql054003
+      SERVER_PORT: 8090
+      APP_IMAGE_UPLOAD_DIR: /app/uploads/images/
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - curdapp-network
+    restart: unless-stopped
+
+networks:
+  curdapp-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
